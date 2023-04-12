@@ -34,6 +34,7 @@ body {
   --borderRadius8: 8px;
   --borderRadius12: 12px;
   --borderRadius16: 16px;
+  --borderRadius50: 50%;
 
   --Primary-fontSize: 20px;
   --secondary-fontSize: 15px;
