@@ -49,14 +49,7 @@ body {
 .App {
   height: 100%;
   width: 100%;
-  background: linear-gradient(
-    45deg,
-    #d16aff,
-    #bb44f0,
-    #9614d0,
-    #660094,
-    #310047
-  );
+  background: linear-gradient(45deg, #bb44f0, #9614d0, #c71313);
   background-size: 300% 300%;
   animation: color 10s ease-in-out infinite;
 }
