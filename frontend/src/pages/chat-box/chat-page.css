@@ -1,0 +1,21 @@
+.chat-main-container {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+}
+
+.chat-container-header {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chat-container-header > button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  margin-right: 8px;
+}
+.chat-container-header > button > img {
+  width: 32px;
+  height: 32px;
+}
