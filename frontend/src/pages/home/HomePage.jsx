@@ -2,81 +2,84 @@ import React, { useState } from "react";
 import "./home_page.css";
 
 import Exit from "../../assets/icons/exit.png";
-
-const Card = ({ title, content }) => {
-  return (
-    <div className="unchatted-profile">
-      <h2>{title}</h2>
-      <p>{content}</p>
-    </div>
-  );
-};
+import ProfileCard from "../../components/ProfileCard";
+import Modal from "../../components/Modal/Modal";
 
 const HomePage = () => {
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const [profiles, setProfiles] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
   ]);
 
   const [unchattedProfiles, setunchattedProfiles] = useState([
-    { title: "Card 1", content: "Lorem ipsum dolor sit amet." },
-    { title: "Card 2", content: "Consectetur adipiscing elit." },
+    { id: "1", name: "Card 1", email: "card1@gmail.com" },
+    { id: "2", name: "Card 2", email: "card2@gmail.com" },
     {
-      title: "Card 3",
-      content:
-        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      id: "3",
+      name: "Card 3",
+      email: "card3@gmail.com",
     },
-    { title: "Card 4", content: "Ut enim ad minim veniam." },
+    { id: "4", name: "Card 4", email: "card4@gmail.com" },
     {
-      title: "Card 5",
-      content:
-        "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    },
-    {
-      title: "Card 6",
-      content:
-        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      id: "5",
+      name: "Card 5",
+      email: "card5@email.com",
     },
     {
-      title: "Card 7",
-      content:
-        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      id: "6",
+      name: "Card 6",
+      email: "card6@gmail.com",
+    },
+    {
+      id: "7",
+      name: "Card 7",
+      email: "card7@gmail.com",
     },
   ]);
   return (
-    <div className="home-main-container">
-      <div className="home-container-header">
-        <button>
-          <img src={Exit} alt="exit" />{" "}
-        </button>
-      </div>
-      <section className="home-container-profiles">
-        <div className="profiles-container">
-          {profiles.map((item, index) => (
-            <div className="profile" key={item + index}>
-              <div className="profile-notification" />
-            </div>
-          ))}
+    <>
+      <Modal open={logoutOpen} onClose={setLogoutOpen} />
+      <div className="home-main-container">
+        <div className="home-container-header">
+          <button onClick={() => setLogoutOpen(true)}>
+            <img src={Exit} alt="exit" />{" "}
+          </button>
         </div>
-      </section>
-      <div className="unchatted-main-profiles-container">
-        <div className="unchatted-profiles-container">
-          {unchattedProfiles.map((card, index) => (
-            <Card key={index} title={card.title} content={card.content} />
-          ))}
+        <section className="home-container-profiles">
+          <div className="profiles-container">
+            {profiles.map((item, index) => (
+              <div className="profile" key={item + index}>
+                {item}
+                <div className="profile-notification" />
+              </div>
+            ))}
+          </div>
+        </section>
+        <div className="unchatted-main-profiles-container">
+          <div className="unchatted-profiles-container">
+            {unchattedProfiles.map((card, index) => (
+              <ProfileCard
+                key={index}
+                name={card.name}
+                email={card.email}
+                id={card.id}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
