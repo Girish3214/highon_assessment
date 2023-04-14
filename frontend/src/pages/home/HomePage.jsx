@@ -41,13 +41,12 @@ const HomePage = () => {
     <>
       <Modal open={logoutOpen} onClose={onClose} logout={logout} />
       <div className="home-main-container">
-        {isAuthenticated && (
-          <div className="home-container-header">
-            <button onClick={() => setLogoutOpen(true)}>
-              <img src={Exit} alt="exit" />{" "}
-            </button>
-          </div>
-        )}
+        <div className="home-container-header">
+          <div className="app-title">A-Chat</div>
+          <button onClick={() => setLogoutOpen(true)}>
+            <img src={Exit} alt="exit" />{" "}
+          </button>
+        </div>
         <section className="home-container-profiles">
           <div
             className="profiles-container"
