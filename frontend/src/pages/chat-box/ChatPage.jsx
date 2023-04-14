@@ -1,22 +1,23 @@
 import React from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 import "./chat-page.css";
 
 import Back from "../../assets/icons/back.png";
 
 const ChatPage = () => {
-  let { userId } = useParams();
-  let location = useLocation();
-  console.log(location);
+  let params = useParams();
+  let navigate = useNavigate();
+  console.log(params.id);
 
   return (
     <div className="chat-main-container">
       <div className="chat-container-header">
-        <button>
-          <img src={Back} alt="exit" />{" "}
+        <button onClick={() => navigate(-1)}>
+          <img src={Back} alt="exit" />
         </button>
       </div>
+      <div className="chat-container-body"></div>
     </div>
   );
 };
