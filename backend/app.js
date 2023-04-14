@@ -8,16 +8,15 @@ import connectDB from "./db/connect.js";
 import notFound from "./middleware/not-found.js";
 import errorHandler from "./middleware/error-handler.js";
 
+import userRouter from "./routes/userRoute.js";
 const app = express();
 dotenv.config();
 
 app.use(morgan("tiny"));
-app.use(cors);
+app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Received");
-});
+app.use("/api/v1/users", userRouter);
 
 app.use(notFound);
 app.use(errorHandler);
