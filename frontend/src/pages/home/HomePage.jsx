@@ -7,6 +7,7 @@ import "./home_page.css";
 import Exit from "../../assets/icons/exit.png";
 import ProfileCard from "../../components/ProfileCard";
 import Modal from "../../components/Modal/Modal";
+import axios from "../../utils/axios";
 
 const HomePage = () => {
   const { isAuthenticated, logout, getIdTokenClaims, isLoading } = useAuth0();
@@ -17,6 +18,7 @@ const HomePage = () => {
     console.log(token);
     return token;
   };
+
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [profiles, setProfiles] = useState(["1", "2", "3"]);
 
@@ -32,6 +34,18 @@ const HomePage = () => {
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       navigate("/login");
+    }
+
+    if (!isLoading && isAuthenticated) {
+      getToken().then(async (res) => {
+        console.log(res);
+        await axios.post("/users", {
+          username: res.name,
+          email: res.email,
+          avatarImage: res.picture,
+        });
+      });
+      // axios.post()
     }
 
     return () => {};
