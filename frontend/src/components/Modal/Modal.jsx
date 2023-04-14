@@ -3,7 +3,7 @@ import ReactDom from "react-dom";
 
 import "./modal.css";
 
-function Modal({ open, onClose }) {
+function Modal({ open, onClose, logout }) {
   if (!open) return null;
   return ReactDom.createPortal(
     <>
@@ -13,8 +13,18 @@ function Modal({ open, onClose }) {
           <div className="modal-details-container">
             <p>Do you want to LOGOUT</p>
             <div className="modal-buttons-container">
-              <button onClick={() => onClose(false)}>Yes</button>
-              <button onClick={() => onClose(false)}>No</button>
+              <button
+                onClick={() =>
+                  logout({
+                    logoutParams: {
+                      returnTo: window.location.origin + "/login",
+                    },
+                  })
+                }
+              >
+                Yes
+              </button>
+              <button onClick={() => onClose()}>No</button>
             </div>
           </div>
         </div>

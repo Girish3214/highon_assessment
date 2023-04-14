@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
+
 import "./home_page.css";
 
 import Exit from "../../assets/icons/exit.png";
@@ -6,58 +9,50 @@ import ProfileCard from "../../components/ProfileCard";
 import Modal from "../../components/Modal/Modal";
 
 const HomePage = () => {
+  const { isAuthenticated, logout, getIdTokenClaims, isLoading } = useAuth0();
+  const navigate = useNavigate();
+  console.log(isAuthenticated, isLoading);
+  const getToken = async () => {
+    const token = await getIdTokenClaims();
+    console.log(token);
+    return token;
+  };
   const [logoutOpen, setLogoutOpen] = useState(false);
-  const [profiles, setProfiles] = useState([
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-  ]);
+  const [profiles, setProfiles] = useState(["1", "2", "3"]);
 
   const [unchattedProfiles, setunchattedProfiles] = useState([
     { id: "1", name: "Card 1", email: "card1@gmail.com" },
     { id: "2", name: "Card 2", email: "card2@gmail.com" },
-    {
-      id: "3",
-      name: "Card 3",
-      email: "card3@gmail.com",
-    },
-    { id: "4", name: "Card 4", email: "card4@gmail.com" },
-    {
-      id: "5",
-      name: "Card 5",
-      email: "card5@email.com",
-    },
-    {
-      id: "6",
-      name: "Card 6",
-      email: "card6@gmail.com",
-    },
-    {
-      id: "7",
-      name: "Card 7",
-      email: "card7@gmail.com",
-    },
   ]);
+
+  const onClose = (name) => {
+    setLogoutOpen(false);
+  };
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate("/login");
+    }
+
+    return () => {};
+  }, [isLoading]);
+
   return (
     <>
-      <Modal open={logoutOpen} onClose={setLogoutOpen} />
+      <Modal open={logoutOpen} onClose={onClose} logout={logout} />
       <div className="home-main-container">
-        <div className="home-container-header">
-          <button onClick={() => setLogoutOpen(true)}>
-            <img src={Exit} alt="exit" />{" "}
-          </button>
-        </div>
+        {isAuthenticated && (
+          <div className="home-container-header">
+            <button onClick={() => setLogoutOpen(true)}>
+              <img src={Exit} alt="exit" />{" "}
+            </button>
+          </div>
+        )}
         <section className="home-container-profiles">
-          <div className="profiles-container">
+          <div
+            className="profiles-container"
+            style={{ justifyContent: profiles.length < 4 && "center" }}
+          >
             {profiles.map((item, index) => (
               <div className="profile" key={item + index}>
                 {item}

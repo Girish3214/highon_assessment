@@ -1,29 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+
 import "./login-page.css";
 
-import Apple from "../../assets/icons/apple.png";
-import Facebook from "../../assets/icons/facebook.png";
-import Google from "../../assets/icons/google.png";
-
 const LoginPage = () => {
+  const { loginWithRedirect } = useAuth0();
+  useEffect(() => {
+    return () => {};
+  }, []);
+
   return (
     <div className="login-main-container">
       <div className="login-signup-container">
         <div className="icon-button-container">
-          <button>
-            {" "}
-            <img src={Google} alt="icon" /> Signup with Google
-          </button>
-        </div>
-        <div className="icon-button-container">
-          <button>
-            <img src={Apple} alt="icon" /> Signup with Apple
-          </button>
-        </div>
-        <div className="icon-button-container">
-          <button>
-            <img src={Facebook} alt="icon" /> Signup with Facebook
-          </button>
+          <button onClick={() => loginWithRedirect()}>Click to Login</button>
         </div>
       </div>
     </div>

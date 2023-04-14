@@ -40,6 +40,9 @@
 
   overflow-x: scroll;
   padding: 0 2.12rem;
+
+  min-width: 80%;
+  /* justify-content: center; */
 }
 
 .profiles-container::-webkit-scrollbar {
@@ -56,6 +59,9 @@
   position: relative;
 }
 
+.profiles-container > .profile:first-child {
+  margin-left: 0.5rem;
+}
 .profile-notification {
   position: absolute;
 
