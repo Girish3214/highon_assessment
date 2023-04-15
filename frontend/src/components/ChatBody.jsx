@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
-const ChatBody = () => {
+const ChatBody = ({ messages }) => {
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    scrollRef.current?.scroolIntoView({ behaviour: "smooth" });
+
+    return () => {};
+  }, [messages]);
+
   return (
     <div className="chat-container-body">
       <div className="chat-image-container">
@@ -11,6 +19,17 @@ const ChatBody = () => {
           alt="profile"
         />
         <p>Girish</p>
+      </div>
+      <div className="chat-messages">
+        {messages.map((msg, index) => (
+          <div key={index}>
+            <div className={`message ${msg.fromSelf ? "sended" : "received"}`}>
+              <div className="content">
+                <p>{msg.message}</p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
