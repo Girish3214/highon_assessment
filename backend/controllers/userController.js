@@ -12,7 +12,7 @@ const userRegister = async (req, res) => {
       email,
       avatarImage,
     });
-    return res.json(user);
+    return res.status(StatusCodes.OK).json(user);
   }
 };
 
@@ -24,7 +24,7 @@ const getAllUsers = async (req, res) => {
     "email",
     "avatarImage",
   ]);
-  return res.json(allUsers);
+  return res.status(StatusCodes.OK).json(allUsers);
 };
 
 export { userRegister, getAllUsers };
