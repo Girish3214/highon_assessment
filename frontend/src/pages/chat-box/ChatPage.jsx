@@ -19,8 +19,16 @@ const ChatPage = () => {
   let params = useParams();
   let navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth0();
-  const { isSelectedNewUser, setIsSelectedNewUser, localUser, senderId } =
-    useGlobalContext();
+  const {
+    isSelectedNewUser,
+    setIsSelectedNewUser,
+    localUser,
+    senderId,
+    notifications,
+    setNotifications,
+    getAllUsers,
+    getUnchattedUsers,
+  } = useGlobalContext();
 
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -60,6 +68,9 @@ const ChatPage = () => {
     socket.on("message-received", (newMsgReceived) => {
       if (recevierId !== newMsgReceived.users[0]) {
         // give notification
+        if (!notifications.includes(newMsgReceived)) {
+          setNotifications([newMsgReceived, ...notifications]);
+        }
       } else {
         setMessages([
           ...messages,
@@ -73,13 +84,14 @@ const ChatPage = () => {
   });
   const sendMsg = async (message) => {
     socket.emit("stop-typing", recevierId);
-    console.log("cls", selectedUser);
     if (isSelectedNewUser) {
       await axios.put(`/profiles`, {
         sender: localUser,
         newProfileId: selectedUser,
       });
       setIsSelectedNewUser(false);
+      getAllUsers(localUser._id);
+      getUnchattedUsers(localUser._id);
     }
     const { data } = await axios.post("/messages/addmsg", {
       from: senderId,

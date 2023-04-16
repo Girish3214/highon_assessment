@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
 
 import "./home_page.css";
 
@@ -10,6 +11,9 @@ import Modal from "../../components/Modal/Modal";
 import axios from "../../utils/axios";
 import PageSpinner from "../../components/page-spinner/PageSpinner";
 import { useGlobalContext } from "../../store/Context";
+
+const ENDPOINT = "http://localhost:8080/";
+var socket;
 
 const HomePage = () => {
   const { isAuthenticated, logout, getIdTokenClaims, isLoading } = useAuth0();
@@ -22,12 +26,16 @@ const HomePage = () => {
     unchattedProfiles,
     setunchattedProfiles,
     allUsers,
-    setAllUsers,
+    unchatData,
+    notifications,
+    getAllUsers,
+    getUnchattedUsers,
+    setNotifications,
+    removeNotification,
   } = useGlobalContext();
 
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [userData, setUserData] = useState(undefined);
-  const [unchatData, setUnChatData] = useState([]);
 
   const getToken = async () => {
     const token = await getIdTokenClaims();
@@ -37,29 +45,44 @@ const HomePage = () => {
     setLogoutOpen(false);
   };
 
-  const getAllUsers = async (id) => {
-    const { data } = await axios.get(`/users/all/${id}`);
-    setAllUsers(data);
-    setunchattedProfiles(data);
-    console.log(data);
+  const removeNotifications = (id) => {
+    removeNotification(id);
+    navigate(`/chat/${id}`);
   };
-  const getUnchattedUsers = async (id) => {
-    const { data } = await axios.get(`/profiles/${id}`);
-    console.log("cls", data.data, allUsers);
-    setUnChatData(data.data);
-  };
+  useEffect(() => {
+    const user = localUser;
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    return () => {};
+  }, []);
 
+  useEffect(() => {
+    socket.on("message-received", (newMsgReceived) => {
+      if (localUser._id !== newMsgReceived.users[0]) {
+        // give notification
+        if (!notifications.includes(newMsgReceived)) {
+          setNotifications([newMsgReceived, ...notifications]);
+        }
+      }
+    });
+  });
   useEffect(() => {
     if (allUsers.length !== 0 && unchatData.length !== 0) {
       const knownUsers = allUsers.filter((user) => {
         return unchatData.filter((profile) => user._id === profile._id)[0];
       });
-      const unknownUsers = allUsers.filter((user) => {
-        return unchatData.filter((profile) => user._id !== profile._id)[0];
-      });
-      console.log("unknown users:", unknownUsers);
+      const unknownUsers =
+        allUsers.length === knownUsers.length
+          ? []
+          : allUsers.filter((user) => {
+              return unchatData.filter(
+                (profile) => user._id !== profile._id
+              )[0];
+            });
       setProfiles(knownUsers);
       setunchattedProfiles(unknownUsers);
+    } else if (unchatData.length === 0) {
+      setProfiles([]);
     }
 
     return () => {};
@@ -121,29 +144,51 @@ const HomePage = () => {
                 className="profiles-container"
                 style={{ justifyContent: profiles.length < 4 && "center" }}
               >
-                {profiles.map((item, index) => (
-                  <div
-                    className="profile"
-                    key={item}
-                    onClick={() => navigate(`/chat/${item._id}`)}
-                  >
-                    <img src={item.avatarImage} />
-                    <div className="profile-notification" />
+                {profiles.length > 0 ? (
+                  profiles.map((item, index) => (
+                    <div
+                      className="profile"
+                      key={item._id}
+                      onClick={() => removeNotifications(item._id)}
+                    >
+                      <img src={item.avatarImage} />
+                      {notifications.length > 0 &&
+                        notifications.map(
+                          (notif, ind) =>
+                            notif.users.includes(item._id) &&
+                            notif.users.includes(localUser?._id) && (
+                              <div
+                                className="profile-notification"
+                                key={notif._id}
+                              />
+                            )
+                        )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="no-profile-container">
+                    Click on the profile to start connection
                   </div>
-                ))}
+                )}
               </div>
             </section>
             <div className="unchatted-main-profiles-container">
               <div className="unchatted-profiles-container">
-                {unchattedProfiles.map((card, index) => (
-                  <ProfileCard
-                    key={index}
-                    name={card.name}
-                    email={card.email}
-                    id={card._id}
-                    profileImage={card.avatarImage}
-                  />
-                ))}
+                {unchattedProfiles.length > 0 ? (
+                  unchattedProfiles.map((card, index) => (
+                    <ProfileCard
+                      key={index}
+                      name={card.username}
+                      email={card.email}
+                      id={card._id}
+                      profileImage={card.avatarImage}
+                    />
+                  ))
+                ) : (
+                  <div className="no-unchatted-users">
+                    All users are in your contact list
+                  </div>
+                )}
               </div>
             </div>
           </div>
