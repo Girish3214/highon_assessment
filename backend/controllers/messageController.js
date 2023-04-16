@@ -13,9 +13,7 @@ const addMessage = async (req, res) => {
   if (data) {
     return res.status(StatusCodes.OK).json(data);
   }
-  return res
-    .status(StatusCodes.EXPECTATION_FAILED)
-    .json({ msg: "Failed to added message." });
+  return res.json({ msg: "Failed to added message." });
 };
 const getMessages = async (req, res) => {
   const { from, to } = req.body;

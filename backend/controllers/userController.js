@@ -37,8 +37,6 @@ const getSingleUser = async (req, res) => {
   if (user) {
     return res.status(StatusCodes.OK).json(user);
   }
-  return res
-    .status(StatusCodes.EXPECTATION_FAILED)
-    .json({ msg: "something went wrong!" });
+  return res.json({ msg: "something went wrong!" });
 };
 export { userRegister, getAllUsers, getSingleUser };
