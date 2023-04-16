@@ -3,7 +3,7 @@ import Picker from "emoji-picker-react";
 
 import Happy from "../assets/icons/happy.png";
 import Send from "../assets/icons/send.png";
-const ChatInput = ({ sendMsg, message, typingHandler }) => {
+const ChatInput = ({ sendMsg, message, typingHandler, setMessage }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const toggleEmojiPicker = () => {

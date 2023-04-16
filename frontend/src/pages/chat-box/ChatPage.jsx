@@ -11,6 +11,7 @@ import Back from "../../assets/icons/back.png";
 import ChatBody from "../../components/ChatBody";
 import ChatInput from "../../components/ChatInput";
 import axios from "../../utils/axios";
+import { useGlobalContext } from "../../store/Context";
 
 const ENDPOINT = "http://localhost:8080/";
 var socket;
@@ -18,6 +19,9 @@ const ChatPage = () => {
   let params = useParams();
   let navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth0();
+  const { isSelectedNewUser, setIsSelectedNewUser, localUser, senderId } =
+    useGlobalContext();
+
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
 
@@ -27,9 +31,9 @@ const ChatPage = () => {
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
 
-  const { _id: senderId } = JSON.parse(localStorage.getItem("chat-user"));
   const { id: recevierId } = params;
 
+  console.log(isSelectedNewUser);
   const getUserDetails = async () => {
     const user = await axios.get(`/users/${recevierId}`);
     if (user) {
@@ -37,7 +41,7 @@ const ChatPage = () => {
     }
   };
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("chat-user"));
+    const user = localUser;
     socket = io(ENDPOINT);
     socket.emit("setup", user);
     socket.on("connected", () => {
@@ -48,7 +52,9 @@ const ChatPage = () => {
     socket.on("stop-typing", () => setIsTyping(false));
 
     getUserDetails();
-    return () => {};
+    return () => {
+      setIsSelectedNewUser(false);
+    };
   }, []);
 
   useEffect(() => {
@@ -68,6 +74,14 @@ const ChatPage = () => {
   });
   const sendMsg = async (message) => {
     socket.emit("stop-typing", recevierId);
+
+    if (isSelectedNewUser) {
+      await axios.put(`/profiles`, {
+        senderId: localUser._id,
+        newProfileId: [recevierId],
+      });
+      setIsSelectedNewUser(false);
+    }
     const { data } = await axios.post("/messages/addmsg", {
       from: senderId,
       to: recevierId,
@@ -150,6 +164,7 @@ const ChatPage = () => {
             sendMsg={sendMsg}
             typingHandler={typingHandler}
             message={message}
+            setMessage={setMessage}
           />
         </div>
       )}

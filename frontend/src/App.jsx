@@ -1,10 +1,13 @@
 import RouterComponent from "./components/RouterComponent";
+import { AppProvider } from "./store/Context";
 
 const App = () => {
   return (
-    <div className="App">
-      <RouterComponent />
-    </div>
+    <AppProvider>
+      <div className="App">
+        <RouterComponent />
+      </div>
+    </AppProvider>
   );
 };
 

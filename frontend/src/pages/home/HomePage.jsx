@@ -9,10 +9,13 @@ import ProfileCard from "../../components/ProfileCard";
 import Modal from "../../components/Modal/Modal";
 import axios from "../../utils/axios";
 import PageSpinner from "../../components/page-spinner/PageSpinner";
+import { useGlobalContext } from "../../store/Context";
 
 const HomePage = () => {
   const { isAuthenticated, logout, getIdTokenClaims, isLoading } = useAuth0();
   const navigate = useNavigate();
+
+  const { localUser } = useGlobalContext();
 
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [userData, setUserData] = useState(undefined);
@@ -66,7 +69,6 @@ const HomePage = () => {
       isAuthenticated &&
       localStorage.getItem("chat-user")
     ) {
-      const localUser = JSON.parse(localStorage.getItem("chat-user"));
       getAllUsers(localUser._id);
     }
 
