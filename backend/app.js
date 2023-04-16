@@ -11,6 +11,8 @@ import errorHandler from "./middleware/error-handler.js";
 
 import userRouter from "./routes/userRoute.js";
 import messageRouter from "./routes/messageRoute.js";
+import profilesRouter from "./routes/userChatProfileRoute.js";
+
 const app = express();
 dotenv.config();
 
@@ -19,6 +21,7 @@ app.use(express.json());
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/messages", messageRouter);
+app.use("/api/v1/profiles", profilesRouter);
 
 app.use(notFound);
 app.use(errorHandler);
