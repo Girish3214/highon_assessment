@@ -15,16 +15,19 @@ const HomePage = () => {
   const { isAuthenticated, logout, getIdTokenClaims, isLoading } = useAuth0();
   const navigate = useNavigate();
 
-  const { localUser } = useGlobalContext();
+  const {
+    localUser,
+    profiles,
+    setProfiles,
+    unchattedProfiles,
+    setunchattedProfiles,
+    allUsers,
+    setAllUsers,
+  } = useGlobalContext();
 
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [userData, setUserData] = useState(undefined);
-  const [profiles, setProfiles] = useState(["1", "2", "3"]);
-
-  const [unchattedProfiles, setunchattedProfiles] = useState([
-    { id: "1", name: "Card 1", email: "card1@gmail.com" },
-    { id: "2", name: "Card 2", email: "card2@gmail.com" },
-  ]);
+  const [unchatData, setUnChatData] = useState([]);
 
   const getToken = async () => {
     const token = await getIdTokenClaims();
@@ -36,8 +39,31 @@ const HomePage = () => {
 
   const getAllUsers = async (id) => {
     const { data } = await axios.get(`/users/all/${id}`);
-    setProfiles(data);
+    setAllUsers(data);
+    setunchattedProfiles(data);
+    console.log(data);
   };
+  const getUnchattedUsers = async (id) => {
+    const { data } = await axios.get(`/profiles/${id}`);
+    console.log("cls", data.data, allUsers);
+    setUnChatData(data.data);
+  };
+
+  useEffect(() => {
+    if (allUsers.length !== 0 && unchatData.length !== 0) {
+      const knownUsers = allUsers.filter((user) => {
+        return unchatData.filter((profile) => user._id === profile._id)[0];
+      });
+      const unknownUsers = allUsers.filter((user) => {
+        return unchatData.filter((profile) => user._id !== profile._id)[0];
+      });
+      console.log("unknown users:", unknownUsers);
+      setProfiles(knownUsers);
+      setunchattedProfiles(unknownUsers);
+    }
+
+    return () => {};
+  }, [allUsers, unchatData]);
 
   useEffect(() => {
     if (userData?._id || localStorage.getItem("chat-user")?._id) {
@@ -70,6 +96,7 @@ const HomePage = () => {
       localStorage.getItem("chat-user")
     ) {
       getAllUsers(localUser._id);
+      getUnchattedUsers(localUser._id);
     }
 
     return () => {};
@@ -113,7 +140,8 @@ const HomePage = () => {
                     key={index}
                     name={card.name}
                     email={card.email}
-                    id={card.id}
+                    id={card._id}
+                    profileImage={card.avatarImage}
                   />
                 ))}
               </div>

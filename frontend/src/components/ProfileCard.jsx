@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import Facebook from "../assets/icons/facebook.png";
 import axios from "../utils/axios";
 import { useGlobalContext } from "../store/Context";
 const ProfileCard = ({ name, email, id, profileImage }) => {
@@ -9,6 +8,7 @@ const ProfileCard = ({ name, email, id, profileImage }) => {
   const { setIsSelectedNewUser } = useGlobalContext();
 
   const messageButtonClick = async () => {
+    console.log("cls id", id);
     // const localUser = JSON.parse(localStorage.getItem("chat-user"));
     // const data = await axios.put(`/profiles`, {
     //   senderId: localUser._id,
@@ -20,7 +20,7 @@ const ProfileCard = ({ name, email, id, profileImage }) => {
   return (
     <div className="unchatted-profile">
       <div className="unchatted-profile-image-container">
-        <img src={Facebook} alt="profile" />
+        <img src={profileImage} alt="profile" />
       </div>
       <div className="unchatted-profile-details-container">
         <div className="uncharted-profile-name">{name}</div>

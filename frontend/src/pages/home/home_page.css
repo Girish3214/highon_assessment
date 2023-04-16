@@ -149,12 +149,13 @@
   display: flex;
   justify-content: center;
   background-color: orange;
-  border-radius: 50%;
+  border-radius: 5rem;
 }
 
 .unchatted-profile-image-container > img {
   width: 7rem;
   height: 7rem;
+  border-radius: 5rem;
 }
 
 .unchatted-profile-details-container {

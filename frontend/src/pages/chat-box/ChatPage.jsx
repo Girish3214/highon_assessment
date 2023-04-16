@@ -73,11 +73,11 @@ const ChatPage = () => {
   });
   const sendMsg = async (message) => {
     socket.emit("stop-typing", recevierId);
-
+    console.log("cls", selectedUser);
     if (isSelectedNewUser) {
       await axios.put(`/profiles`, {
-        senderId: localUser._id,
-        newProfileId: [recevierId],
+        sender: localUser,
+        newProfileId: selectedUser,
       });
       setIsSelectedNewUser(false);
     }
