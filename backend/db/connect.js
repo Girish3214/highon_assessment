@@ -4,7 +4,8 @@ const connectDB = async () => {
   // mongoose.set("useCreateIndex", true);
   mongoose.set("strictQuery", false);
   try {
-    const URL = process.env.MONGO_URL;
+    const URL =
+      "mongodb+srv://Udemy:123456321@cluster0.fwjii.mongodb.net/?retryWrites=true&w=majority";
     const conn = await mongoose.connect(URL, {
       dbName: "HIGHON",
       autoIndex: true,
