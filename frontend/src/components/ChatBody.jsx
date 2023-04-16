@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
+import Lottie from "react-lottie-player";
 
-const ChatBody = ({ messages }) => {
+import Animation from "../utils/typing-animation.json";
+const ChatBody = ({ messages, isTyping }) => {
   const scrollRef = useRef();
 
   useEffect(() => {
@@ -30,6 +32,19 @@ const ChatBody = ({ messages }) => {
             </div>
           </div>
         ))}
+        {isTyping && (
+          <Lottie
+            autoFocus={true}
+            animationData={Animation}
+            style={{
+              width: 75,
+              height: 90,
+              marginLeft: "-6px",
+              marginBottom: "-28px",
+            }}
+            play
+          />
+        )}
       </div>
     </div>
   );

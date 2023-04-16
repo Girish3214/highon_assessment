@@ -3,9 +3,8 @@ import Picker from "emoji-picker-react";
 
 import Happy from "../assets/icons/happy.png";
 import Send from "../assets/icons/send.png";
-const ChatInput = ({ sendMsg }) => {
+const ChatInput = ({ sendMsg, message, typingHandler }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [message, setMessage] = useState("");
 
   const toggleEmojiPicker = () => {
     setShowEmojiPicker(!showEmojiPicker);
@@ -40,7 +39,7 @@ const ChatInput = ({ sendMsg }) => {
               type="text"
               className="input-text"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => typingHandler(e)}
             />
           </div>
           <button type="submit" className="send-container">
