@@ -169,6 +169,14 @@
   height: 90%;
 }
 
+.chat-messages::-webkit-scrollbar {
+  width: 0.2rem;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+  background-color: grey;
+  width: 0.1rem;
+  border-radius: 1rem;
+}
 .chat-messages .message {
   display: flex;
   align-items: center;
