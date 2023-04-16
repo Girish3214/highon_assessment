@@ -139,6 +139,9 @@ const HomePage = () => {
                 <img src={Exit} alt="exit" />{" "}
               </button>
             </div>
+            <div className="profiles-heading user-chats">
+              <p>Your Chats</p>
+            </div>
             <section className="home-container-profiles">
               <div
                 className="profiles-container"
@@ -172,6 +175,9 @@ const HomePage = () => {
                 )}
               </div>
             </section>
+            <div className="profiles-heading">
+              <p>Unchatted Profiles</p>
+            </div>
             <div className="unchatted-main-profiles-container">
               <div className="unchatted-profiles-container">
                 {unchattedProfiles.length > 0 ? (

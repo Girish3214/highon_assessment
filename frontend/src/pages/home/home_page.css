@@ -28,7 +28,7 @@
   font-family: "Courier New", Courier, monospace;
 }
 .home-container-profiles {
-  margin: 3rem 0.5rem;
+  margin: 1rem 0.5rem 3rem;
   display: flex;
   justify-content: center;
 }
@@ -86,6 +86,16 @@
   border-radius: 5rem;
 }
 
+.profiles-heading {
+  font-size: 1.5rem;
+  color: aliceblue;
+  text-align: center;
+  border-bottom: 1px dotted grey;
+}
+
+.profiles-heading.user-chats {
+  margin-top: 3rem;
+}
 /* UNCHATTED PROFILE CSS */
 .unchatted-main-profiles-container {
   width: 100%;
@@ -106,6 +116,9 @@
   position: absolute;
   left: 0;
   right: 0;
+
+  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .unchatted-profiles-container::-webkit-scrollbar {
@@ -133,6 +146,12 @@
 
 .unchatted-profile:first-child {
   margin-left: 4rem;
+}
+
+@media screen and (min-width: 600px) {
+  .unchatted-profile:first-child {
+    margin-left: 0;
+  }
 }
 /* .unchatted-profile h2 {
   margin: 0 0 1rem;
