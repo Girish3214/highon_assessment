@@ -1,19 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import axios from "../utils/axios";
 import { useGlobalContext } from "../store/Context";
 const ProfileCard = ({ name, email, id, profileImage }) => {
   const navigate = useNavigate();
   const { setIsSelectedNewUser } = useGlobalContext();
 
   const messageButtonClick = async () => {
-    console.log("cls id", id);
-    // const localUser = JSON.parse(localStorage.getItem("chat-user"));
-    // const data = await axios.put(`/profiles`, {
-    //   senderId: localUser._id,
-    //   newProfileId: [id],
-    // });
     setIsSelectedNewUser(true);
     navigate(`/chat/${id}`);
   };

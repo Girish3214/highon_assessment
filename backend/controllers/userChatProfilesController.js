@@ -12,7 +12,6 @@ const addNewProfileToUser = async (req, res) => {
         .json({ msg: "already user profiles is present" });
     }
   }
-  console.log("cls", sender, newProfileId);
   const data = await UserProfiles.updateOne(
     { _id: sender._id },
     {
