@@ -3,7 +3,7 @@ import Message from "../models/messageModel.js";
 
 const addMessage = async (req, res) => {
   const { from, to, message } = req.body;
-  const data = Message.create({
+  const data = await Message.create({
     message: {
       text: message,
     },
@@ -11,9 +11,11 @@ const addMessage = async (req, res) => {
     sender: from,
   });
   if (data) {
-    res.status(StatusCodes.OK).json({ msg: "Message added successfully." });
+    return res.status(StatusCodes.OK).json(data);
   }
-  res.status(StatusCodes.BAD_REQUEST).json({ msg: "Failed to added message." });
+  return res
+    .status(StatusCodes.EXPECTATION_FAILED)
+    .json({ msg: "Failed to added message." });
 };
 const getMessages = async (req, res) => {
   const { from, to } = req.body;
@@ -31,7 +33,7 @@ const getMessages = async (req, res) => {
     };
   });
 
-  res.status(StatusCodes.OK).json(projectedMsgs);
+  return res.status(StatusCodes.OK).json(projectedMsgs);
 };
 
 export { addMessage, getMessages };
