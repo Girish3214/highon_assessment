@@ -73,6 +73,7 @@ const HomePage = () => {
           "chat-user",
           JSON.stringify({ ...res, _id: data._id })
         );
+        getUnchattedUsers(data._id);
       });
     } else if (
       !isLoading &&
@@ -102,6 +103,17 @@ const HomePage = () => {
           // give notification
           if (!notifications.includes(newMsgReceived)) {
             setNotifications([newMsgReceived, ...notifications]);
+            if (profiles.length === 0) {
+              const knownUsers = allUsers.filter((user) => {
+                return newMsgReceived.sender === user._id;
+              });
+
+              const unknownUsers = allUsers.filter((user) => {
+                return user._id !== newMsgReceived.sender;
+              });
+              setProfiles(knownUsers);
+              setunchattedProfiles(unknownUsers);
+            }
           }
         }
       });
@@ -122,11 +134,8 @@ const HomePage = () => {
             });
       setProfiles(knownUsers);
       setunchattedProfiles(unknownUsers);
-
-      console.log("cls if:", unknownUsers, knownUsers);
     } else if (unchatData.length === 0) {
       setProfiles([]);
-      console.log("cls else");
     }
 
     return () => {};
