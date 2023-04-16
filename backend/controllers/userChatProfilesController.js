@@ -5,7 +5,6 @@ const addNewProfileToUser = async (req, res) => {
   const { senderId, newProfileId } = req.body;
 
   const user = await UserProfiles.findById({ _id: senderId });
-  console.log(user);
   if (user?.profiles) {
     if (user.profiles.includes(newProfileId)) {
       return res
@@ -27,7 +26,6 @@ const addNewProfileToUser = async (req, res) => {
       upsert: true,
     }
   );
-  console.log(data);
   return res
     .status(StatusCodes.OK)
     .json({ msg: "Added user profile successfully" });

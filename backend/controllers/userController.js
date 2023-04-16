@@ -27,7 +27,6 @@ const getAllUsers = async (req, res) => {
 };
 
 const getSingleUser = async (req, res) => {
-  console.log(req.params, req.body);
   const user = await User.findOne({ _id: req.params.id }).select([
     "_id",
     "username",

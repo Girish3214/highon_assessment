@@ -33,7 +33,6 @@ const ChatPage = () => {
 
   const { id: recevierId } = params;
 
-  console.log(isSelectedNewUser);
   const getUserDetails = async () => {
     const user = await axios.get(`/users/${recevierId}`);
     if (user) {
