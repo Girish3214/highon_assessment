@@ -49,44 +49,6 @@ const HomePage = () => {
     removeNotification(id);
     navigate(`/chat/${id}`);
   };
-  useEffect(() => {
-    const user = localUser;
-    socket = io(ENDPOINT);
-    socket.emit("setup", user);
-    return () => {};
-  }, []);
-
-  useEffect(() => {
-    socket.on("message-received", (newMsgReceived) => {
-      if (localUser._id !== newMsgReceived.users[0]) {
-        // give notification
-        if (!notifications.includes(newMsgReceived)) {
-          setNotifications([newMsgReceived, ...notifications]);
-        }
-      }
-    });
-  });
-  useEffect(() => {
-    if (allUsers.length !== 0 && unchatData.length !== 0) {
-      const knownUsers = allUsers.filter((user) => {
-        return unchatData.filter((profile) => user._id === profile._id)[0];
-      });
-      const unknownUsers =
-        allUsers.length === knownUsers.length
-          ? []
-          : allUsers.filter((user) => {
-              return unchatData.filter(
-                (profile) => user._id !== profile._id
-              )[0];
-            });
-      setProfiles(knownUsers);
-      setunchattedProfiles(unknownUsers);
-    } else if (unchatData.length === 0) {
-      setProfiles([]);
-    }
-
-    return () => {};
-  }, [allUsers, unchatData]);
 
   useEffect(() => {
     if (userData?._id || localStorage.getItem("chat-user")?._id) {
@@ -106,7 +68,6 @@ const HomePage = () => {
           email: res?.email ?? res.name + "@gmail.com",
           avatarImage: res.picture,
         });
-
         setUserData(data);
         localStorage.setItem(
           "chat-user",
@@ -124,6 +85,52 @@ const HomePage = () => {
 
     return () => {};
   }, [isLoading]);
+
+  useEffect(() => {
+    if (localUser) {
+      const user = localUser;
+      socket = io(ENDPOINT);
+      socket.emit("setup", user);
+    }
+    return () => {};
+  }, [localUser]);
+
+  useEffect(() => {
+    if (localUser) {
+      socket.on("message-received", (newMsgReceived) => {
+        if (localUser._id !== newMsgReceived.users[0]) {
+          // give notification
+          if (!notifications.includes(newMsgReceived)) {
+            setNotifications([newMsgReceived, ...notifications]);
+          }
+        }
+      });
+    }
+  });
+  useEffect(() => {
+    if (allUsers.length !== 0 && unchatData.length !== 0) {
+      const knownUsers = allUsers.filter((user) => {
+        return unchatData.filter((profile) => user._id === profile._id)[0];
+      });
+      const unknownUsers =
+        allUsers.length === knownUsers.length
+          ? []
+          : allUsers.filter((user) => {
+              return unchatData.filter(
+                (profile) => user._id !== profile._id
+              )[0];
+            });
+      setProfiles(knownUsers);
+      setunchattedProfiles(unknownUsers);
+
+      console.log("cls if:", unknownUsers, knownUsers);
+    } else if (unchatData.length === 0) {
+      setProfiles([]);
+      console.log("cls else");
+    }
+
+    return () => {};
+  }, [allUsers, unchatData]);
 
   return (
     <>
