@@ -17,7 +17,6 @@ const userRegister = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-  console.log(req.params.id);
   const allUsers = await User.find({ _id: { $ne: req.params.id } }).select([
     "_id",
     "username",

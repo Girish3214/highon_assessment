@@ -53,9 +53,7 @@ const start = async () => {
         // socket.broadcast.to(chat.users[1]).emit("new-message", chat);
         if (!chat.users) return console.log("chat.users not defined");
         chat.users.forEach((user) => {
-          console.log(user, ":");
           if (user === newMsg.sender) return;
-          console.log(newMsg);
 
           socket.in(user).emit("message-received", newMsg);
         });

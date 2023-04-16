@@ -43,12 +43,6 @@ const ChatPage = () => {
 
   useEffect(() => {
     socket.on("message-received", (newMsgReceived) => {
-      console.log(
-        "cls",
-        recevierId !== newMsgReceived.users[1],
-        recevierId,
-        newMsgReceived
-      );
       if (recevierId !== newMsgReceived.users[0]) {
         // give notification
       } else {
@@ -70,7 +64,6 @@ const ChatPage = () => {
       message,
     });
 
-    console.log(data);
     socket.emit("new-message", data);
     setMessages([
       ...messages,
@@ -82,7 +75,6 @@ const ChatPage = () => {
   };
 
   const getAllMsgs = async () => {
-    console.log([senderId, recevierId]);
     const { data } = await axios.post("/messages/getmsgs", {
       from: senderId,
       to: recevierId,
@@ -105,7 +97,6 @@ const ChatPage = () => {
     var timerLength = 3000;
     setTimeout(() => {
       var timeNow = new Date().getTime();
-      console.log(timeNow - lastTypingTime >= timerLength && typing);
       if (timeNow - lastTypingTime >= timerLength && typing) {
         setTyping(false);
         socket.emit("stop-typing", recevierId);
