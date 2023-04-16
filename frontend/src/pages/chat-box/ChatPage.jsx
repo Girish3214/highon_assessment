@@ -13,13 +13,15 @@ import ChatInput from "../../components/ChatInput";
 import axios from "../../utils/axios";
 
 const ENDPOINT = "http://localhost:8080/";
-var socket, selectedChatCompare;
+var socket;
 const ChatPage = () => {
   let params = useParams();
   let navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth0();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+
+  const [selectedUser, setSelectedUser] = useState({});
 
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -28,6 +30,12 @@ const ChatPage = () => {
   const { _id: senderId } = JSON.parse(localStorage.getItem("chat-user"));
   const { id: recevierId } = params;
 
+  const getUserDetails = async () => {
+    const user = await axios.get(`/users/${recevierId}`);
+    if (user) {
+      setSelectedUser(user.data);
+    }
+  };
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("chat-user"));
     socket = io(ENDPOINT);
@@ -38,6 +46,8 @@ const ChatPage = () => {
 
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop-typing", () => setIsTyping(false));
+
+    getUserDetails();
     return () => {};
   }, []);
 
@@ -131,7 +141,11 @@ const ChatPage = () => {
               iChat
             </div>
           </div>
-          <ChatBody messages={messages} isTyping={isTyping} />
+          <ChatBody
+            messages={messages}
+            isTyping={isTyping}
+            selectedUser={selectedUser}
+          />
           <ChatInput
             sendMsg={sendMsg}
             typingHandler={typingHandler}
